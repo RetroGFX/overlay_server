@@ -8,15 +8,25 @@ from rocknix_dtbo import make_dtbo
 
 app = Flask(__name__)
 try:
-    app.config.from_file('config.json', load=json.load)
+    app.config.from_file('/data/config.json', load=json.load)
 except:
     pass
-app.config['UPLOAD_DIR'] = 'uploads'
-app.config['DTBO_DIR'] = 'dtbo'
+app.config['UPLOAD_DIR'] = '/data/uploads'
+app.config['DTBO_DIR'] = '/data/dtbo'
 app.config['STATIC_DIR'] = 'static'
-app.config['FEEDBACK_DIR'] = 'feedback'
+app.config['FEEDBACK_DIR'] = '/data/feedback'
 app.config['MAX_CONTENT_LENGTH'] = 512 * 1024  # 512K should be enough, dtbs are usually about 100K
 
+def send_to_discord(message):
+    """Send a message to a Discord webhook."""
+    if not 'DISCORD_WEBHOOK' in app.config:
+        return None
+
+    payload = {
+        "content": message,
+    }
+    response = requests.post(app.config['DISCORD_WEBHOOK'], json=payload)
+    return response.status_code, response.text
 
 def send_to_telegram(message):
     """Send a message to a Telegram chat."""
@@ -90,7 +100,7 @@ def upload_file():
         f.write(dtbo)
 
     if 'silent' not in request.values:
-        send_to_telegram(f"new overlay: {ovlname} for {file.filename}")
+        send_to_discord(f"new overlay: {ovlname} for {file.filename}")
 
     return (dtbo, 200, {'content-disposition': 'attachment; filename="mipi-panel.dtbo"'})
 
@@ -107,10 +117,11 @@ def feedback(md5):
     report = f"`{filename}`\nfeedback from `{user}`\ndev: `{dev}`\n\n{desc}\n"
     with open(os.path.join(app.config['FEEDBACK_DIR'], filename), 'w') as f:
         f.write(report)
-    send_to_telegram(report)
+    send_to_discord(report)
 
     return ("Accepted", 201, {})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000)

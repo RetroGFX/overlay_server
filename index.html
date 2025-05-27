@@ -1,182 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTB overlay generator for Rocknix</title>
-    <script src="static/crypto-js.min.js"></script>
-    <link rel="stylesheet" href="static/simple.min.css">
-    <style>
-        input::file-selector-button {
-          font-weight: bold;
-          padding: 0.5em;
-          border: thin solid grey;
-          border-radius: 3px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Rocknix DTB overlays for <i>almost</i> supported devices</h1>
-    <h5>Note: this service is for Rocknix Nightly</h5>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DTB overlay generator for UnofficialOS</title>
+        <script src="static/crypto-js.min.js"></script>
+        <link rel="stylesheet" href="static/simple.min.css" />
+        <style>
+            input::file-selector-button {
+                font-weight: bold;
+                padding: 0.5em;
+                border: thin solid grey;
+                border-radius: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>UnofficialOS DTB overlays for <i>almost</i> supported devices</h1>
+        <h5>
+            Big thanks to our friends at ROCKNIX for coming up with the concept.
+        </h5>
 
-    <div>
-    Please make sure you have a fresh (20250427 or later) image installed.<br/>
-    Download at <a href=https://nightly.rocknix.org/><b>https://nightly.rocknix.org/</b></a><br/>
-    For K36, R36Max and similar "EE Clones" you need <b>B</b> image, e.g. <code>ROCKNIX-RK3326.aarch64-20250430-b.img.gz</code><br/>
-    </div>
+        <div>
+            Please make sure you have a fresh (20250528 or later) image
+            installed.<br />
+        </div>
 
-    <hr style="width:100%">
-    <h5>Upload your <span style="background-color:yellow">stock</span> dtb file here:</h5>
-    <div>
-        <form id="uploadForm">
-            <input type="file" id="fileInput" required><br/>
-            <input type="checkbox" id="LSi" name="LSi" /> <label for="LSi">Invert left stick</label>
-               &mdash; requires <a href="static/rk3326-gameconsole-r36max.dtb">fresh dtb</a>! <br/>
-            <input type="checkbox" id="RSi" name="RSi" /> <label for="RSi">Invert right stick</label><br/>
-            <select id="JP" name="JP">
-                <option value="" selected>default</option>
-                <option value="mm">my mini</option>
-            </select>
-            <label for="JP" style="display:inline-block">Joypad variant</label><br/>
-            <!--
+        <hr style="width: 100%" />
+        <h5>
+            Upload your <span style="background-color: yellow">stock</span> dtb
+            file here:
+        </h5>
+        <div>
+            <form id="uploadForm">
+                <input type="file" id="fileInput" required /><br />
+                <input type="checkbox" id="LSi" name="LSi" />
+                <label for="LSi">Invert left stick</label> &mdash; requires
+                <a href="static/rk3326-gameconsole-r36max.dtb">fresh dtb</a>!
+                <br />
+                <input type="checkbox" id="RSi" name="RSi" />
+                <label for="RSi">Invert right stick</label><br />
+                <select id="JP" name="JP">
+                    <option value="" selected>default</option>
+                    <option value="mm">my mini</option>
+                </select>
+                <label for="JP" style="display: inline-block"
+                    >Joypad variant</label
+                ><br />
+                <!--
             <input type="checkbox" id="Dno" name="Dno" /> <label for="Dno">Display no original mode</label><br/>
             -->
-            <select id="DR" name="DR">
-                <option value="0" selected>0&deg; (normal)</option>
-                <option value="90">90&deg; (right up)</option>
-                <option value="180">180&deg; (bottom up)</option>
-                <option value="270">270&deg; (left up)</option>
-            </select>
-            <label for="DR" style="display:inline-block">Display rotation</label><br/>
-            <input type="checkbox" id="HPi" name="HPi" /> <label for="HPi">Invert headphone detection (if there is no sound)</label><br/>
-            <button type="submit">Upload</button>
-        </form>
-    </div>
-    <div id="md5_display"></div>
-    <div id="results_container"></div>
+                <select id="DR" name="DR">
+                    <option value="0" selected>0&deg; (normal)</option>
+                    <option value="90">90&deg; (right up)</option>
+                    <option value="180">180&deg; (bottom up)</option>
+                    <option value="270">270&deg; (left up)</option>
+                </select>
+                <label for="DR" style="display: inline-block"
+                    >Display rotation</label
+                ><br />
+                <input type="checkbox" id="HPi" name="HPi" />
+                <label for="HPi"
+                    >Invert headphone detection (if there is no sound)</label
+                ><br />
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <div id="md5_display"></div>
+        <div id="results_container"></div>
 
-    <hr style="width:100%">
-    <h5>Changelog</h5>
-    <ul>
-        <li>2025-05-21 fix headphone detection pin pull (should fix sound)</li>
-        <li>2025-05-11 add option to invert headphone detection</li>
-        <li>2025-05-11 add display rotaion option</li>
-        <li>2025-05-07 fix audio</li>
-        <li>2025-05-06 fix errors when processing some dtbs</li>
-        <li>2025-05-04 option for MyMini joypad</li>
-        <li>2025-05-04 left stick invert (with fresh dtb)</li>
-        <li>2025-05-04 fix display reset</li>
-        <li>2025-05-02 fix volume keys on My Mini</li>
-    </ul>
+        <hr style="width: 100%" />
+        <h5>Changelog</h5>
+        <ul>
+            <li>
+                2025-05-21 fix headphone detection pin pull (should fix sound)
+            </li>
+            <li>2025-05-11 add option to invert headphone detection</li>
+            <li>2025-05-11 add display rotaion option</li>
+            <li>2025-05-07 fix audio</li>
+            <li>2025-05-06 fix errors when processing some dtbs</li>
+            <li>2025-05-04 option for MyMini joypad</li>
+            <li>2025-05-04 left stick invert (with fresh dtb)</li>
+            <li>2025-05-04 fix display reset</li>
+            <li>2025-05-02 fix volume keys on My Mini</li>
+        </ul>
 
-    <hr style="width:100%">
-    <div>Get help at <a href="https://discord.com/channels/948029830325235753/1110966019389935616">Rocknix Discord</a> (rockchip-rk3326 channel)</div>
+        <hr style="width: 100%" />
+        <div>
+            Get help at
+            <a href="https://discord.gg/rpaN9E9VJ8">UnofficialOS Discord</a>
+            (#gameconsole-devices channel)
+        </div>
 
-    <script>
-        function showDownload(md5Hash, blob) {
-            // Extract the file from the server's response
-            const downloadUrl = URL.createObjectURL(blob);
+        <script>
+            function showDownload(md5Hash, blob) {
+                // Extract the file from the server's response
+                const downloadUrl = URL.createObjectURL(blob);
 
-            const div = document.createElement('div');
-            div.id = 'Results';
+                const div = document.createElement("div");
+                div.id = "Results";
 
-            // Trigger the download
-            const a = document.createElement('a');
-            a.innerHTML = '<button>Download overlay</button>';
-            a.href = downloadUrl;
-            a.download = 'mipi-panel.dtbo';
-            div.appendChild(a);
+                // Trigger the download
+                const a = document.createElement("a");
+                a.innerHTML = "<button>Download overlay</button>";
+                a.href = downloadUrl;
+                a.download = "mipi-panel.dtbo";
+                div.appendChild(a);
 
-            // Short instructions
-            const help = document.createElement('div');
-            help.innerHTML  = 'You get a <code>mipi-panel.dtbo</code> file.<br/>';
-            help.innerHTML += 'On a boot (<code>ROCKNIX</code>) partition create a directory named <code>overlays</code><br/>';
-            help.innerHTML += 'Put the <code>mipi-panel.dtbo</code> file into <code>overlays</code> directory.';
-            div.appendChild(help);
+                // Short instructions
+                const help = document.createElement("div");
+                help.innerHTML =
+                    "You get a <code>mipi-panel.dtbo</code> file.<br/>";
+                help.innerHTML +=
+                    "On a boot (<code>UNOFFICIALO</code>) partition create a directory named <code>overlays</code><br/>";
+                help.innerHTML +=
+                    "Put the <code>mipi-panel.dtbo</code> file into <code>overlays</code> directory.";
+                div.appendChild(help);
 
-            div.insertAdjacentHTML('beforeend', '<hr>  <h5>Feedback:</h5>');
+                div.insertAdjacentHTML("beforeend", "<hr>  <h5>Feedback:</h5>");
 
-            // Feedback form
-            const fb = document.createElement('form');
-            fb.action = "feedback/" + md5Hash;
-            fb.method = "POST";
-            fb.innerHTML  = '<label for="device">Your device:</label> <input type="text" id="device" name="device" required><br><br>';
-            fb.innerHTML += '<label for="user">Your Discord name:</label> <input type="text" id="user" name="user"><br><br>';
-            fb.innerHTML += '<label for="description">Describe what is broken:</label>';
-            fb.innerHTML += '<textarea id="description" name="description" rows="10" required></textarea><br><br>';
-            fb.innerHTML += '<button type="submit">Submit</button>';
-            div.appendChild(fb);
+                // Feedback form
+                const fb = document.createElement("form");
+                fb.action = "feedback/" + md5Hash;
+                fb.method = "POST";
+                fb.innerHTML =
+                    '<label for="device">Your device:</label> <input type="text" id="device" name="device" required><br><br>';
+                fb.innerHTML +=
+                    '<label for="user">Your Discord name:</label> <input type="text" id="user" name="user"><br><br>';
+                fb.innerHTML +=
+                    '<label for="description">Describe what is broken:</label>';
+                fb.innerHTML +=
+                    '<textarea id="description" name="description" rows="10" required></textarea><br><br>';
+                fb.innerHTML += '<button type="submit">Submit</button>';
+                div.appendChild(fb);
 
-            document.getElementById('results_container').appendChild(div);
-        };
-
-        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const oldbutton = document.getElementById('Results');
-            if (oldbutton) { oldbutton.remove(); }
-
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                alert("Please select a file.");
-                return;
+                document.getElementById("results_container").appendChild(div);
             }
 
-            ovlOpts = ''
-            if (document.getElementById('LSi').checked) { ovlOpts += '-LSi'; }
-            if (document.getElementById('RSi').checked) { ovlOpts += '-RSi'; }
-            jpSelect = document.getElementById('JP')
-            if (jpSelect.selectedIndex > 0) {
-                ovlOpts += '-JP' + jpSelect.value;
-            }
-            /*
-            if (document.getElementById('Dno').checked) { ovlOpts += '-Dno'; }
-            */
-            drSelect = document.getElementById('DR')
-            if (drSelect.selectedIndex > 0) {
-                ovlOpts += '-DR' + drSelect.selectedOptions[0].value;
-            }
-            if (document.getElementById('HPi').checked) { ovlOpts += '-HPi'; }
+            document
+                .getElementById("uploadForm")
+                .addEventListener("submit", async function (event) {
+                    event.preventDefault();
 
-            // Calculate MD5 hash
-            const reader = new FileReader();
-            reader.onload = async function() {
-                const fileContents = reader.result;
-                const wordArray = CryptoJS.lib.WordArray.create(fileContents);
-                const md5Hash = CryptoJS.MD5(wordArray).toString();
-                const dtbo_name = md5Hash + ovlOpts;
-                document.getElementById("md5_display").innerText = 'dtbo name (MD5+opts): ' + dtbo_name;
+                    const oldbutton = document.getElementById("Results");
+                    if (oldbutton) {
+                        oldbutton.remove();
+                    }
 
-                // Check with server
-                const response = await fetch(`dtbo/${dtbo_name}`);
-                if (response.ok) {
-                    showDownload(md5Hash, await response.blob());
-                } else if (response.status === 404) {
-                    // Upload file content
-                    const formData = new FormData();
-                    formData.append('file', file);
+                    const fileInput = document.getElementById("fileInput");
+                    const file = fileInput.files[0];
 
-                    const response = await fetch(`convert_dtb?opts=${ovlOpts}`, {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                    if (!response.ok) {
-                        alert("Overlay generation failed. Is uploaded file a dtb?");
+                    if (!file) {
+                        alert("Please select a file.");
                         return;
                     }
 
-                    showDownload(md5Hash, await response.blob());
+                    ovlOpts = "";
+                    if (document.getElementById("LSi").checked) {
+                        ovlOpts += "-LSi";
+                    }
+                    if (document.getElementById("RSi").checked) {
+                        ovlOpts += "-RSi";
+                    }
+                    jpSelect = document.getElementById("JP");
+                    if (jpSelect.selectedIndex > 0) {
+                        ovlOpts += "-JP" + jpSelect.value;
+                    }
+                    /*
+            if (document.getElementById('Dno').checked) { ovlOpts += '-Dno'; }
+            */
+                    drSelect = document.getElementById("DR");
+                    if (drSelect.selectedIndex > 0) {
+                        ovlOpts += "-DR" + drSelect.selectedOptions[0].value;
+                    }
+                    if (document.getElementById("HPi").checked) {
+                        ovlOpts += "-HPi";
+                    }
 
-                } else {
-                    alert("Unexpected error while checking your dtb");
-                }
-            };
+                    // Calculate MD5 hash
+                    const reader = new FileReader();
+                    reader.onload = async function () {
+                        const fileContents = reader.result;
+                        const wordArray =
+                            CryptoJS.lib.WordArray.create(fileContents);
+                        const md5Hash = CryptoJS.MD5(wordArray).toString();
+                        const dtbo_name = md5Hash + ovlOpts;
+                        document.getElementById("md5_display").innerText =
+                            "dtbo name (MD5+opts): " + dtbo_name;
 
-            reader.readAsArrayBuffer(file);
-        });
-    </script>
-</body>
+                        // Check with server
+                        const response = await fetch(`dtbo/${dtbo_name}`);
+                        if (response.ok) {
+                            showDownload(md5Hash, await response.blob());
+                        } else if (response.status === 404) {
+                            // Upload file content
+                            const formData = new FormData();
+                            formData.append("file", file);
+
+                            const response = await fetch(
+                                `convert_dtb?opts=${ovlOpts}`,
+                                {
+                                    method: "POST",
+                                    body: formData,
+                                },
+                            );
+
+                            if (!response.ok) {
+                                alert(
+                                    "Overlay generation failed. Is uploaded file a dtb?",
+                                );
+                                return;
+                            }
+
+                            showDownload(md5Hash, await response.blob());
+                        } else {
+                            alert("Unexpected error while checking your dtb");
+                        }
+                    };
+
+                    reader.readAsArrayBuffer(file);
+                });
+        </script>
+    </body>
 </html>

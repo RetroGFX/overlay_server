@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+  overlay-server:
+    build: .
+    container_name: overlay-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/data
