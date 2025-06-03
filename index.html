@@ -34,12 +34,23 @@
         <div>
             <form id="uploadForm">
                 <input type="file" id="fileInput" required /><br />
-                <input type="checkbox" id="LSi" name="LSi" />
-                <label for="LSi">Invert left stick</label> &mdash; requires
-                <a href="static/rk3326-k36-clone.dtb">fresh dtb</a>!
+                <h6>
+                    Joystick Options (requires
+                    <a href="static/rk3326-k36-clone.dtb">fresh dtb</a>!)
+                </h6>
+
+                <input type="checkbox" id="LSo" name="LSo" />
+                <label for="LSo">Left stick only</label>
                 <br />
+
+                <input type="checkbox" id="LSi" name="LSi" />
+                <label for="LSi">Invert left stick</label>
+                <br />
+
                 <input type="checkbox" id="RSi" name="RSi" />
-                <label for="RSi">Invert right stick</label><br />
+                <label for="RSi">Invert right stick</label>
+                <br />
+
                 <select id="JP" name="JP">
                     <option value="" selected>default</option>
                     <option value="mm">my mini</option>
@@ -156,6 +167,9 @@
                     }
 
                     ovlOpts = "";
+                    if (document.getElementById("LSo").checked) {
+                        ovlOpts += "-LSo";
+                    }
                     if (document.getElementById("LSi").checked) {
                         ovlOpts += "-LSi";
                     }

@@ -360,6 +360,14 @@ def make_dtbo(dtb_data, args):
         rsi_ovl.set_property('invert-absry', 1)
         args['logger'].info(f"invert right stick on {rsi_ovl.path}")
 
+    # If needed, mark only left stick
+    if 'LSo' in args['flags']:
+        if (not rsi_ovl):
+            rsi_ovl = add_overlay(overlay, '&joypad')
+        rsi_ovl.set_property('amux-count', 2)
+        rsi_ovl.set_property('amux-channel-mapping', [2, 3])
+        args['logger'].info(f"left stick only on {rsi_ovl.path}")
+
     # My mini has separate ADC channels for axis, so we need another driver
     if 'JPmm' in args['flags']:
         if (not rsi_ovl):
