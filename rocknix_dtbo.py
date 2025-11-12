@@ -372,7 +372,7 @@ def make_dtbo(dtb_data, args):
     if 'JPmm' in args['flags']:
         if (not rsi_ovl):
             rsi_ovl = add_overlay(overlay, '&joypad')
-        rsi_ovl.set_property('compatible', "rocknix-joypad")
+        rsi_ovl.set_property('compatible', "unofficialos-joypad")
         rsi_ovl.set_property('io-channel-names', ["key-RY", "key-RX", "key-LY", "key-LX"])
         rsi_ovl.set_property('io-channels', [0xffffffff, 3, 0xffffffff, 3, 0xffffffff, 2, 0xffffffff, 1])
         add_fixup(overlay, 'saradc', rsi_ovl.path+'/__overlay__:io-channels:0')
