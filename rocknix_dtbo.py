@@ -344,7 +344,7 @@ def make_dtbo(dtb_data, args):
 
     rsi_ovl = None
     # Left stick was inverted by default, so invert inversion here
-    if 'LSi' not in args['flags']:
+    if 'LSi' not in args['flags'] and 'JPmm' not in args['flags']:
         rsi_ovl = add_overlay(overlay, '&joypad')
         rsi_ovl.set_property('invert-absx', 1)
         rsi_ovl.set_property('invert-absy', 1)
